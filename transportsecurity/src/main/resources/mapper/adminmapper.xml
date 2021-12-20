@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 映射SQL语句 -->
+<!-- namespace：名称空间指定为接口的全类名 -->
+<mapper namespace="com.why.transportsecurity.dao.AdminMapper">
+    <select id="getAdminLogin" resultType="com.why.transportsecurity.po.AdminLogin">
+        select id,username,password,auths from tbl_admin_login where username = #{username}
+    </select>
+
+    <insert id="insertAdminLogin" useGeneratedKeys="true" keyProperty="id" parameterType="com.why.transportsecurity.po.AdminLogin">
+        insert into tbl_admin_login values (null ,#{username},#{password},#{auths})
+    </insert>
+
+    <insert id="insertAdminInfo">
+        insert into tbl_admin_info values (null ,#{uPhone},#{uEmail},#{uAddress},#{uBirth},#{uDate},#{uId})
+    </insert>
+
+    <select id="queryAdmin" resultType="com.why.transportsecurity.vo.PersonalCenter">
+        select login.username,info.u_phone,info.u_email,info.u_address,info.u_birth,info.u_date,info.u_id
+        from tbl_admin_login login,tbl_admin_info info
+        where login.username = #{uName} and login.id = info.u_id
+    </select>
+
+    <update id="updateAdminLogin">
+        update tbl_admin_login
+        set
+            <if test="AdminLogin.username != null">
+                username = #{AdminLogin.username}
+            </if>
+            <if test="AdminLogin.password != null">
+                ,password = #{AdminLogin.password}
+            </if>
+            <if test="AdminLogin.auths != null">
+                ,auths = #{AdminLogin.auths}
+            </if>
+        where username = #{usernameOld}
+    </update>
+
+    <update id="updateAdminInfo" parameterType="com.why.transportsecurity.po.AdminInfo">
+        update tbl_admin_info
+        set
+            <if test="uPhone != null">
+                u_phone = #{uPhone}
+            </if>
+            <if test="uEmail != null">
+                ,u_email = #{uEmail}
+            </if>
+            <if test="uAddress != null">
+                ,u_address = #{uAddress}
+            </if>
+            <if test="uBirth != null">
+                ,u_birth = #{uBirth}
+            </if>
+            <if test="uDate != null">
+                ,u_date = #{uDate}
+            </if>
+        where u_id = #{uId}
+    </update>
+</mapper>
